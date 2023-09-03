@@ -198,5 +198,4 @@ public class ModificaVoto extends HttpServlet {
 			e.printStackTrace();
 		}
 	}
-	
 }
