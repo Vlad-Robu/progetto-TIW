@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="UTF-8">
+<title>Esito Appello</title>
+<link rel="stylesheet" type="text/css" media="all"
+	href="../css/mystyle.css" th:href="@{/css/mystyle.css}" />
+</head>
+<body>
+	<h1>Esito Appello</h1>
+
+	<p
+		th:if="${sortedData.statoValutazione != 'pubblicato' and sortedData.statoValutazione != 'verbalizzato' and sortedData.statoValutazione != 'rifiutato'}">
+		Voto non ancora definito.</p>
+
+	<div
+		th:unless="${sortedData.statoValutazione != 'pubblicato' and sortedData.statoValutazione != 'verbalizzato' and sortedData.statoValutazione != 'rifiutato'}"
+		class="table-container">
+		<table style="width: 100%">
+			<tr>
+				<th>Matricola</th>
+				<th>Cognome</th>
+				<th>Nome</th>
+				<th>Email</th>
+				<th>Corso di Laurea</th>
+				<th>Voto</th>
+				<th>Stato di Valutazione</th>
+				<th>Data Appello</th>
+				<th>Nome Corso</th>
+			</tr>
+			<tr>
+				<td th:text="${sortedData.matricola}"></td>
+				<td th:text="${sortedData.cognome}"></td>
+				<td th:text="${sortedData.nome}"></td>
+				<td th:text="${sortedData.email}"></td>
+				<td th:text="${sortedData.corsoDiLaurea}"></td>
+				<td th:text="${sortedData.voto}"></td>
+				<td th:text="${sortedData.statoValutazione}"></td>
+				<td th:text="${sortedData.appelloBean.date}"></td>
+				<td th:text="${sortedData.appelloBean.courseName}"></td>
+			</tr>
+		</table>
+	</div>
+
+	<p th:if="${sortedData.statoValutazione == 'rifiutato'}">Il voto e'
+		stato rifiutato.</p>
+
+	<div class="center-section" style="margin-top: 30px;"
+		th:if="${sortedData.statoValutazione == 'pubblicato' and
+             sortedData.voto != null and
+             not #strings.contains(', ,assente,rimandato,riprovato,rifiutato', sortedData.voto)}">
+		<form method="post" action="RifiutaVoto">
+			<input type="hidden" name="idstudente"
+				th:value="${sortedData.idstudente}" /> <input type="hidden"
+				name="selectedAppelloId" th:value="${selectedAppelloId}" />
+			<button type="submit" class="button-link">RIFIUTA</button>
+		</form>
+	</div>
+
+	<div class="center-section" style="margin-top: 30px;">
+		<a th:href="@{/GoToHomeStudente}" class="button-link">Torna alla
+			home</a>
+
+	</div>
+</body>
+</html>

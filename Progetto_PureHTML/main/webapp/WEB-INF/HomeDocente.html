@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="UTF-8">
+<title>HomeDocente</title>
+<link rel="stylesheet" type="text/css" media="all"
+	href="../css/mystyle.css" th:href="@{/css/mystyle.css}" />
+</head>
+<body>
+	<h1>Lista Corsi</h1>
+	<form method="get" action="SelezionaAppello">
+		<!-- Selezione del corso -->
+		<p th:text=" ${errorMsg}"></p>
+		<label for="corso">Seleziona un corso:</label> <select name="corso">
+			<th:block th:each="corso : ${corsi}">
+				<option th:value="${corso.id}" th:text="${corso.name}"
+					th:selected="${corso.id == selectedCorsoId}"></option>
+			</th:block>
+		</select> <input type="hidden" name="corsi" th:value="${corsi}" />
+
+		<!-- Bottone per inviare la selezione -->
+		<button type="submit" class="button-link">Seleziona</button>
+	</form>
+
+	<!-- Mostra gli appelli -->
+	<div class="appelli-container" th:if="${selectedCorsoId != null}">
+		<label for="appelli">Seleziona un appello:</label>
+		<ul id="appelli">
+			<th:block th:each="appello : ${appelli}">
+				<li><a
+					th:href="@{/DettaglioAppelloDocente(selectedAppelloId=${appello.id})}"
+					th:text="${appello.date}"></a></li>
+			</th:block>
+		</ul>
+	</div>
+
+
+	<div style="margin-top: 30px;">
+		<a th:href="@{/Logout}" class="button-link">Logout</a>
+	</div>
+</body>
+</html>

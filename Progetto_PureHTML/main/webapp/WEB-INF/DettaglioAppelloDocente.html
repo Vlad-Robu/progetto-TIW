@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="UTF-8">
+<title>Studenti Iscritti</title>
+<link rel="stylesheet" type="text/css" media="all"
+	href="../css/mystyle.css" th:href="@{/css/mystyle.css}" />
+</head>
+<body>
+	<h1>
+		Studenti Iscritti all'appello di <span
+			th:text="${infoAppello['courseName']}"></span> in data <span
+			th:text="${infoAppello['date']}"></span>
+	</h1>
+	<div class="table-container">
+		<table style="width: 100%">
+			<thead>
+				<tr>
+					<th><a
+						th:href="@{'SortOrder?sort=matricola&order=' + ${sortOrders['matricola']} + '&selectedAppelloId=' + ${selectedAppelloId}}">
+							Matricola </a></th>
+					<th><a
+						th:href="@{'SortOrder?sort=cognome&order=' + ${sortOrders['cognome']} + '&selectedAppelloId=' + ${selectedAppelloId}}">
+							Cognome </a></th>
+					<th><a
+						th:href="@{'SortOrder?sort=nome&order=' + ${sortOrders['nome']} + '&selectedAppelloId=' + ${selectedAppelloId}}">
+							Nome </a></th>
+					<th><a
+						th:href="@{'SortOrder?sort=email&order=' + ${sortOrders['email']} + '&selectedAppelloId=' + ${selectedAppelloId}}">
+							Email </a></th>
+					<th><a
+						th:href="@{'SortOrder?sort=corsoLaurea&order=' + ${sortOrders['corsoLaurea']} + '&selectedAppelloId=' + ${selectedAppelloId}}">
+							Corso di Laurea </a></th>
+					<th><a
+						th:href="@{'SortOrder?sort=voto&order=' + ${sortOrders['voto']} + '&selectedAppelloId=' + ${selectedAppelloId}}">
+							Voto </a></th>
+					<th><a
+						th:href="@{'SortOrder?sort=stato_valutazione&order=' + ${sortOrders['stato_valutazione']} + '&selectedAppelloId=' + ${selectedAppelloId}}">
+							Stato di Valutazione </a></th>
+					<th>Azione</th>
+				</tr>
+			</thead>
+			<tbody>
+				<th:block th:each="student : ${sortedData}">
+					<tr>
+						<td th:text="${student.matricola}"></td>
+						<td th:text="${student.cognome}"></td>
+						<td th:text="${student.nome}"></td>
+						<td th:text="${student.email}"></td>
+						<td th:text="${student.corsoDiLaurea}"></td>
+						<td th:text="${student.voto}"></td>
+						<td th:text="${student.statoValutazione}"></td>
+
+						<td><a
+							th:href="@{'ModificaVoto?studentId=' + ${student.idstudente} + '&selectedAppelloId=' + ${selectedAppelloId}}"
+							th:unless="${student.statoValutazione == 'pubblicato' or student.statoValutazione == 'rifiutato' or student.statoValutazione == 'verbalizzato'}"
+							class="button-link">MODIFICA</a> <a
+							th:if="${student.statoValutazione == 'pubblicato' or student.statoValutazione == 'rifiutato' or student.statoValutazione == 'verbalizzato'}"
+							class="button-link" disabled>MODIFICA</a></td>
+					</tr>
+				</th:block>
+			</tbody>
+		</table>
+	</div>
+
+	<div class="button-container">
+		<form method="post" action="PubblicaVoti" style="display: inline;">
+			<input type="hidden" name="selectedAppelloId"
+				th:value="${selectedAppelloId}" />
+			<button type="submit" class="button-link">PUBBLICA</button>
+		</form>
+
+		<form method="post" action="VerbalizzaVoti" style="display: inline;">
+			<input type="hidden" name="selectedAppelloId"
+				th:value="${selectedAppelloId}" />
+			<button type="submit" class="button-link">VERBALIZZA</button>
+		</form>
+	</div>
+
+	<div class="center-section" style="margin-top: 30px;">
+		<a th:href="@{/GoToHomeDocente}" class="button-link">Torna alla
+			Home</a>
+	</div>
+
+</body>
+</html>

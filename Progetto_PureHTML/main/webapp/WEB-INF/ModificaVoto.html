@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="UTF-8">
+<title>Modifica Voto Studente</title>
+<link rel="stylesheet" type="text/css" media="all"
+	href="../css/mystyle.css" th:href="@{/css/mystyle.css}" />
+</head>
+<body>
+	<div class="title">
+		<h1>Modifica Voto Studente</h1>
+	</div>
+
+	<div class="table-container">
+		<table style="width: 100%">
+			<tr>
+				<th>Matricola</th>
+				<th>Cognome</th>
+				<th>Nome</th>
+				<th>Email</th>
+				<th>Corso di Laurea</th>
+				<th>Voto attuale</th>
+			</tr>
+			<tr>
+				<td th:text="${student.matricola}"></td>
+				<td th:text="${student.cognome}"></td>
+				<td th:text="${student.nome}"></td>
+				<td th:text="${student.email}"></td>
+				<td th:text="${student.corsoDiLaurea}"></td>
+				<td th:text="${student.voto}"></td>
+			</tr>
+		</table>
+	</div>
+
+	<div class="select-container">
+		<form method="post" action="ModificaVoto">
+			<label for="voto">Voto:</label> <select name="voto">
+				<option th:each="value : ${votoValues}" th:value="${value}"
+					th:text="${value}" th:selected="${value == student.voto}"></option>
+			</select> <input type="hidden" name="selectedAppelloId"
+				th:value="${selectedAppelloId}" /> <input type="hidden"
+				name="idstudente" th:value="${student.idstudente}" /> <input
+				type="submit" value="Salva Voto">
+		</form>
+	</div>
+
+	<div class="center-section" style="margin-top: 30px;">
+		<a
+			th:href="@{'DettaglioAppelloDocente?selectedAppelloId=' + ${selectedAppelloId}}"
+			class="button-link">Torna a Dettaglio Appello</a>
+	</div>
+
+</body>
+</html>

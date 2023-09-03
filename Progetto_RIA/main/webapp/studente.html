@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="ISO-8859-1">
+<title>HomeStudente</title>
+<link rel="stylesheet" type="text/css" href="css/mystyle.css" />
+
+</head>
+<body>
+	<div align="right">
+		<a href="Logout">Logout</a>
+	</div>
+	<header>
+		<h1>Lista Corsi</h1>
+		<div id="id_alert" class="alertmessage"></div>
+
+		<form id="selectExam">
+			<label for="corso">Seleziona un corso:</label> <select name="corso"
+				id="corso">
+
+			</select>
+
+		</form>
+
+		<form id="detailExam">
+			<label for="corso">Seleziona un appello:</label> <select
+				name="selectedAppelloId" id="appelloSelect">
+			</select>
+		</form>
+	</header>
+
+	<section id="selectedAppelloSection"></section>
+
+</body>
+<script type="module" src="./js/studenteOrchestrator.js"> 
+	
+</script>
+</html>

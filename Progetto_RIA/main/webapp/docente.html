@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="ISO-8859-1">
+<title>HomeDocente</title>
+<link rel="stylesheet" type="text/css" href="css/mystyle.css" />
+<style>
+#buttonsContainer {
+	display: none;
+}
+</style>
+
+</head>
+<body>
+	<div align="right">
+		<a href="Logout">Logout</a>
+	</div>
+	<header>
+		<h1>Lista Corsi</h1>
+		<div id="id_alert" class="alertmessage"></div>
+		<form id="selectExam">
+			<label for="corso">Seleziona un corso:</label> <select name="corso"
+				id="corso">
+
+			</select>
+
+		</form>
+
+		<form id="detailExam">
+			<label for="corso">Seleziona un appello:</label> <select
+				name="selectedAppelloId" id="appelloSelect">
+			</select>
+		</form>
+	</header>
+
+	<section id="selectedAppelloSection"></section>
+	<div id="buttonsContainer"></div>
+
+
+	<div id="myModal" class="modal">
+
+		<div class="modal-content">
+			<h2>Inserimento Multiplo</h2>
+			<p>Seleziona le righe non inserite e inserisci il voto:</p>
+
+			<table id="modalTable">
+			</table>
+
+			<button id="inviaButton">INVIA</button>
+			<button id="closeModalButton">Chiudi</button>
+		</div>
+	</div>
+
+</body>
+<script type="module" src="./js/docenteOrchestrator.js"> 
+	
+</script>
+</html>

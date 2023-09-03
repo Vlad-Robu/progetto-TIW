@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="UTF-8">
+<title>Student Information</title>
+<link rel="stylesheet" type="text/css" media="all"
+	href="../css/mystyle.css" th:href="@{/css/mystyle.css}" />
+</head>
+<body>
+	<h1>Informazioni Verbale</h1>
+	<p>
+		<strong>Code:</strong> <span th:text="${verbale.idverbale}"></span>
+	</p>
+	<p>
+		<strong>Date and Time:</strong> <span th:text="${verbale.data_ora}"></span>
+	</p>
+
+	<div class="table-container">
+		<table style="width: 100%">
+			<thead>
+				<tr>
+					<th>Matricola</th>
+					<th>Cognome</th>
+					<th>Nome</th>
+					<th>Email</th>
+					<th>Corso di Laurea</th>
+					<th>Voto</th>
+				</tr>
+			</thead>
+			<tbody>
+				<tr th:each="student : ${verbale.datiStud}">
+					<td th:text="${student.matricola}"></td>
+					<td th:text="${student.cognome}"></td>
+					<td th:text="${student.nome}"></td>
+					<td th:text="${student.email}"></td>
+					<td th:text="${student.corsoDiLaurea}"></td>
+					<td th:text="${student.voto}"></td>
+				</tr>
+			</tbody>
+		</table>
+	</div>
+	<div class="center-section" style="margin-top: 30px;">
+		<a
+			th:href="@{'DettaglioAppelloDocente?selectedAppelloId=' + ${verbale.idappello}}"
+			class="button-link">Torna a Dettaglio Appello</a>
+	</div>
+</body>
+</html>
