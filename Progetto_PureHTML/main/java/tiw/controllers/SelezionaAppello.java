@@ -60,59 +60,58 @@ public class SelezionaAppello extends HttpServlet {
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
-
 		HttpSession s = request.getSession();
 		if (s.isNew() || s.getAttribute("user") == null) {
 			String loginpath = getServletContext().getContextPath() + "/index.html";
 			response.sendRedirect(loginpath);
 			return;
 		}
-		
+
 		Integer selectedCorsoId = null;
-		
+
 		try {
-			selectedCorsoId = Integer.parseInt(StringEscapeUtils.escapeJava(request.getParameter("corso")));
+			selectedCorsoId = Integer.parseInt(StringEscapeUtils.escapeJava(request.getParameter("selectedCorsoId")));
 		} catch (NumberFormatException | NullPointerException e) {
 			// only for debugging e.printStackTrace();
 			response.sendError(HttpServletResponse.SC_BAD_REQUEST, "Incorrect param values");
 			return;
 		}
-		
+
 		@SuppressWarnings("unchecked")
 		List<CorsoBean> corsi = (List<CorsoBean>) request.getSession().getAttribute("corsi");
 		List<AppelloBean> appelli = null;
 		User u = (User) s.getAttribute("user");
-		
+
 		AppelloDAO aDao = new AppelloDAO(connection, selectedCorsoId);
 
 		try {
-			
+
 			if (u.getRole().equals("docente")) {
 				DocenteDAO dDao = new DocenteDAO(connection, u.getId());
 				if ( !dDao.hasCorso(selectedCorsoId) ) {
 					response.sendError(HttpServletResponse.SC_UNAUTHORIZED, "User not allowed");
-				    return;
+					return;
 				}
-				
+
 				appelli = aDao.findAppelli(selectedCorsoId);
-					
+
 			} else if (u.getRole().equals("studente")) {
 				StudenteDAO sDao = new StudenteDAO(connection, u.getId());
 				if ( !sDao.hasCorso(selectedCorsoId) ) {
 					response.sendError(HttpServletResponse.SC_UNAUTHORIZED, "User not allowed");
-				    return;
+					return;
 				}
-				
+
 				appelli = aDao.findAppelliStud(selectedCorsoId, u.getId());
 
 			}
-			
+
 			if (appelli == null) {
 				response.sendError(HttpServletResponse.SC_NOT_FOUND, "Resource not found");
 				return;
 			}
 
-			
+
 		} catch (SQLException e) {
 			// throw new ServletException(e);
 			String errorMessage = e.getMessage();
@@ -120,7 +119,7 @@ public class SelezionaAppello extends HttpServlet {
 			return;
 		}
 
-		
+
 		String path = (u.getRole().equals("docente")) ? "/WEB-INF/HomeDocente.html" : "/WEB-INF/HomeStudente.html";
 
 		ServletContext servletContext = getServletContext();
@@ -132,6 +131,7 @@ public class SelezionaAppello extends HttpServlet {
 			ctx.setVariable("errorMsg", "Non ci sono appelli");
 		}
 		templateEngine.process(path, ctx, response.getWriter());
+
 	}
 
 	/**
@@ -141,7 +141,67 @@ public class SelezionaAppello extends HttpServlet {
 	protected void doPost(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
 		// TODO Auto-generated method stub
-		doGet(request, response);
+		HttpSession s = request.getSession();
+		if (s.isNew() || s.getAttribute("user") == null) {
+			String loginpath = getServletContext().getContextPath() + "/index.html";
+			response.sendRedirect(loginpath);
+			return;
+		}
+
+		Integer selectedCorsoId = null;
+
+		try {
+			selectedCorsoId = Integer.parseInt(StringEscapeUtils.escapeJava(request.getParameter("corso")));
+		} catch (NumberFormatException | NullPointerException e) {
+			// only for debugging e.printStackTrace();
+			response.sendError(HttpServletResponse.SC_BAD_REQUEST, "Incorrect param values");
+			return;
+		}
+
+		List<AppelloBean> appelli = null;
+		User u = (User) s.getAttribute("user");
+
+		AppelloDAO aDao = new AppelloDAO(connection, selectedCorsoId);
+
+		try {
+
+			if (u.getRole().equals("docente")) {
+				DocenteDAO dDao = new DocenteDAO(connection, u.getId());
+				if ( !dDao.hasCorso(selectedCorsoId) ) {
+					response.sendError(HttpServletResponse.SC_UNAUTHORIZED, "User not allowed");
+					return;
+				}
+
+				appelli = aDao.findAppelli(selectedCorsoId);
+
+			} else if (u.getRole().equals("studente")) {
+				StudenteDAO sDao = new StudenteDAO(connection, u.getId());
+				if ( !sDao.hasCorso(selectedCorsoId) ) {
+					response.sendError(HttpServletResponse.SC_UNAUTHORIZED, "User not allowed");
+					return;
+				}
+
+				appelli = aDao.findAppelliStud(selectedCorsoId, u.getId());
+
+			}
+
+			if (appelli == null) {
+				response.sendError(HttpServletResponse.SC_NOT_FOUND, "Resource not found");
+				return;
+			}
+
+
+		} catch (SQLException e) {
+			// throw new ServletException(e);
+			String errorMessage = e.getMessage();
+			response.sendError(HttpServletResponse.SC_BAD_GATEWAY, errorMessage);
+			return;
+		}
+
+
+		String ctxpath = getServletContext().getContextPath();
+		String path = ctxpath + "/SelezionaAppello?&selectedCorsoId=" + selectedCorsoId;
+		response.sendRedirect(path);
 	}
 
 	public void destroy() {
